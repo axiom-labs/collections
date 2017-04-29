@@ -87,7 +87,7 @@ class CollectionTest extends TestCase
 
         $result = [];
 
-        $collection->each(function($item, $key) use (&$result) {
+        $collection->each(function ($item, $key) use (&$result) {
             $result[$key] = $item;
         });
 
@@ -100,7 +100,7 @@ class CollectionTest extends TestCase
 
         $result = [];
 
-        $collection->each(function($item, $key) use (&$result) {
+        $collection->each(function ($item, $key) use (&$result) {
             $result[$key] = $item;
 
             if (is_string($item)) {
@@ -115,7 +115,7 @@ class CollectionTest extends TestCase
     {
         $collection = new Collection([1, 2, 3, 4, 5]);
 
-        $mapped = $collection->map(function($item, $key) {
+        $mapped = $collection->map(function ($item, $key) {
             return $item * 2;
         });
 
@@ -128,16 +128,16 @@ class CollectionTest extends TestCase
             ['title' => 'Foo', 'price' => 86],
             ['title' => 'Bar', 'price' => 132],
             ['title' => 'Lorem', 'price' => 102],
-            ['title' => 'Ipsum', 'price' => 13]
+            ['title' => 'Ipsum', 'price' => 13],
         ]);
 
-        $expensiveItems = $collection->filter(function($item, $key) {
+        $expensiveItems = $collection->filter(function ($item, $key) {
             return $item['price'] > 100;
         });
 
         $this->assertSame([
             ['title' => 'Bar', 'price' => 132],
-            ['title' => 'Lorem', 'price' => 102]
+            ['title' => 'Lorem', 'price' => 102],
         ], $expensiveItems->all());
     }
 
@@ -147,16 +147,16 @@ class CollectionTest extends TestCase
             ['title' => 'Foo', 'price' => 86],
             ['title' => 'Bar', 'price' => 132],
             ['title' => 'Lorem', 'price' => 102],
-            ['title' => 'Ipsum', 'price' => 13]
+            ['title' => 'Ipsum', 'price' => 13],
         ]);
 
-        $affordableItems = $collection->reject(function($item, $key) {
+        $affordableItems = $collection->reject(function ($item, $key) {
             return $item['price'] > 100;
         });
 
         $this->assertSame([
             ['title' => 'Foo', 'price' => 86],
-            ['title' => 'Ipsum', 'price' => 13]
+            ['title' => 'Ipsum', 'price' => 13],
         ], $affordableItems->all());
     }
 
@@ -169,9 +169,9 @@ class CollectionTest extends TestCase
             ['name' => 'Zoe Doe', 'email' => null],
         ]);
 
-        $userEmails = $collection->filter(function($item, $key) {
+        $userEmails = $collection->filter(function ($item, $key) {
             return $item['email'] !== null;
-        })->map(function($item, $key) {
+        })->map(function ($item, $key) {
             return $item['email'];
         });
 
@@ -200,7 +200,7 @@ class CollectionTest extends TestCase
         $this->assertSame([
             'mary@example.com',
             'john@example.com',
-            'kelly@example.com'
+            'kelly@example.com',
         ], $employeeEmails->all());
 
         $this->assertSame([
@@ -221,7 +221,7 @@ class CollectionTest extends TestCase
         $collection = Collection::make([
             'lorem' => 'foo',
             'ipsum' => 'bar',
-            'dolar' => 'baz'
+            'dolar' => 'baz',
         ]);
 
         $values = $collection->values();
@@ -234,7 +234,7 @@ class CollectionTest extends TestCase
         $collection = Collection::make([
             'lorem' => 'foo',
             'ipsum' => 'bar',
-            'dolar' => 'baz'
+            'dolar' => 'baz',
         ]);
 
         $keys = $collection->keys();
@@ -248,14 +248,14 @@ class CollectionTest extends TestCase
             'name'    => 'Kai',
             'profile' => [
                 'age'            => 28,
-                'favorite_games' => ['Mass Effect', 'Oxygen Not Included', 'event[0]']
-            ]
+                'favorite_games' => ['Mass Effect', 'Oxygen Not Included', 'event[0]'],
+            ],
         ]);
 
         $flattened = $collection->flatten();
 
         $this->assertSame([
-            'Kai', 28, 'Mass Effect', 'Oxygen Not Included', 'event[0]'
+            'Kai', 28, 'Mass Effect', 'Oxygen Not Included', 'event[0]',
         ], $flattened->all());
     }
 
@@ -273,7 +273,7 @@ class CollectionTest extends TestCase
 
     public function test_sort_method_with_callback()
     {
-        $collection = Collection::make([4, 1, 3, 2, 5])->sort(function($a, $b) {
+        $collection = Collection::make([4, 1, 3, 2, 5])->sort(function ($a, $b) {
             if ($a === $b) {
                 return 0;
             }
@@ -291,7 +291,7 @@ class CollectionTest extends TestCase
             'foo2' => 2,
             'foo5' => 3,
             'foo3' => 4,
-            'foo1' => 5
+            'foo1' => 5,
         ]);
 
         $this->assertEquals([5, 2, 4, 1, 3], $collection->sortByKey()->values()->all());
@@ -304,8 +304,8 @@ class CollectionTest extends TestCase
             'foo2' => 2,
             'foo5' => 3,
             'foo3' => 4,
-            'foo1' => 5
-        ])->sortByKey(function($a, $b) {
+            'foo1' => 5,
+        ])->sortByKey(function ($a, $b) {
             if ($a === $b) {
                 return 0;
             }
@@ -332,17 +332,17 @@ class CollectionTest extends TestCase
             'my name is _' => ['type' => 'alphabetic', 'responses' => []],
             'i am #'       => ['type' => 'numeric', 'responses' => []],
             'i like *'     => ['type' => 'global', 'responses' => []],
-            'yes'          => ['type' => 'atomic', 'responses' => []]
+            'yes'          => ['type' => 'atomic', 'responses' => []],
         ]);
 
-        $result = $data->groupBy(function($item) {
+        $result = $data->groupBy(function ($item) {
             return $item['type'];
         });
 
         $expected = [
             'atomic' => [
                 'hello bot'    => ['type' => 'atomic', 'responses' => []],
-                'yes'          => ['type' => 'atomic', 'responses' => []]
+                'yes'          => ['type' => 'atomic', 'responses' => []],
             ],
             'alphabetic' => [
                 'my name is _' => ['type' => 'alphabetic', 'responses' => []],
@@ -352,7 +352,7 @@ class CollectionTest extends TestCase
             ],
             'global' => [
                 'i like *'     => ['type' => 'global', 'responses' => []],
-            ]
+            ],
         ];
 
         $this->assertEquals($expected, $result->all());

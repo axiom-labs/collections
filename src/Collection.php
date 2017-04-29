@@ -2,13 +2,12 @@
 
 namespace Vulcan\Collections;
 
-use Arrayable;
 use ArrayAccess;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
-use Vulcan\Collections\Support\Arr;
 use Vulcan\Collections\Contracts\Collection as CollectionContract;
+use Vulcan\Collections\Support\Arr;
 
 class Collection implements CollectionContract, ArrayAccess, Countable, IteratorAggregate
 {
@@ -22,7 +21,7 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Create a new collection instance.
      *
-     * @param  mixed  $items
+     * @param mixed $items
      */
     public function __construct($items = [])
     {
@@ -32,7 +31,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Helper static method to easily create a new Collection instance.
      *
-     * @param  mixed  $items;
+     * @param mixed $items;
+     *
      * @return self
      */
     public static function make($items)
@@ -63,7 +63,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Get the specified item from the collection.
      *
-     * @param  mixed  $key
+     * @param mixed $key
+     *
      * @return mixed
      */
     public function get($key)
@@ -74,7 +75,7 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Push an item to the collection.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      */
     public function push($value)
     {
@@ -84,8 +85,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Put the specified item in the collection with the given key.
      *
-     * @param  mixed  $key
-     * @param  mixed  $value
+     * @param mixed $key
+     * @param mixed $value
      */
     public function put($key, $value)
     {
@@ -95,7 +96,7 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Remove the given item from the collection.
      *
-     * @param  mixed  $key
+     * @param mixed $key
      */
     public function remove($key)
     {
@@ -105,7 +106,7 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Determine if the given item exists in the collection.
      *
-     * @param  mixed  $key
+     * @param mixed $key
      */
     public function exists($key)
     {
@@ -143,7 +144,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Loop through the items with the defined callback.
      *
-     * @param  callable  $callable
+     * @param callable $callable
+     *
      * @return void
      */
     public function each(callable $callback)
@@ -160,12 +162,13 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Apply the callable to the collection items.
      *
-     * @param  callable  $callable
+     * @param callable $callable
+     *
      * @return self
      */
     public function map(callable $callable)
     {
-        $keys    = array_keys($this->items);
+        $keys = array_keys($this->items);
         $results = array_map($callable, $this->items, $keys);
 
         return new self($results);
@@ -174,7 +177,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Filter the collection items through the callable.
      *
-     * @param  callable  $callable
+     * @param callable $callable
+     *
      * @return self
      */
     public function filter(callable $callable)
@@ -193,13 +197,14 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Reject the collection items through the callable.
      *
-     * @param  callable  $callable
+     * @param callable $callable
+     *
      * @return self
      */
     public function reject(callable $callable)
     {
-        return $this->filter(function($item, $key) use ($callable) {
-            return ! $callable($item, $key);
+        return $this->filter(function ($item, $key) use ($callable) {
+            return !$callable($item, $key);
         });
     }
 
@@ -208,7 +213,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Whether or not an offset exists.
      *
-     * @param  mixed  $offset
+     * @param mixed $offset
+     *
      * @return bool
      */
     public function offsetExists($offset)
@@ -219,7 +225,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Returns the value at specified offset.
      *
-     * @param  mixed  $offset
+     * @param mixed $offset
+     *
      * @return mixed
      */
     public function offsetGet($offset)
@@ -230,8 +237,9 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Assigns a value to the specified offset.
      *
-     * @param  mixed  $offset
-     * @param  mixed  $value
+     * @param mixed $offset
+     * @param mixed $value
+     *
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -246,7 +254,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Unsets an offset.
      *
-     * @param  mixed  $offset
+     * @param mixed $offset
+     *
      * @return void
      */
     public function offsetUnset($offset)
@@ -291,7 +300,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
      * Sort the collection of item values through a user-defined
      * comparison function.
      *
-     * @param  callable|null  $callable
+     * @param callable|null $callable
+     *
      * @return static
      */
     public function sort(callable $callback = null)
@@ -309,7 +319,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
      * Sort the collection of item keys through a user-defined
      * comparison function.
      *
-     * @param  callable|null  $callable
+     * @param callable|null $callable
+     *
      * @return static
      */
     public function sortByKey(callable $callback = null)
@@ -336,8 +347,9 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Group an associative array by a field or using a callback.
      *
-     * @param  callable  $callback
-     * @param  bool  $preserveKeys
+     * @param callable $callback
+     * @param bool     $preserveKeys
+     *
      * @return static
      */
     public function groupBy(callable $callback)
@@ -347,7 +359,7 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
         foreach ($this->items as $key => $value) {
             $groupKey = $callback($value, $key, $this->items);
 
-            if (! isset($results[$groupKey])) {
+            if (!isset($results[$groupKey])) {
                 $results[$groupKey] = [];
             }
 
@@ -362,8 +374,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Set the given array value with the provided key or index.
      *
-     * @param  mixed  $value
-     * @param  mixed  $key
+     * @param mixed $value
+     * @param mixed $key
      */
     private function itemSet($value, $key = null)
     {
@@ -377,7 +389,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Unset the given key or index from the array.
      *
-     * @param  mixed  $key
+     * @param mixed $key
+     *
      * @return void
      */
     private function itemUnset($key)
@@ -388,7 +401,8 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     /**
      * Checks if the given key or index exists in the array.
      *
-     * @param  mixed  $key
+     * @param mixed $key
+     *
      * @return bool
      */
     private function itemExists($key)

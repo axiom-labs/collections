@@ -11,7 +11,8 @@ class Arr
     /**
      * Flatten the passed multi-dimensional array into a single level.
      *
-     * @param  array  $array
+     * @param array $array
+     *
      * @return array
      */
     public static function flatten($array)
@@ -27,19 +28,24 @@ class Arr
     /**
      * Get an item from an array with dot notation support.
      *
-     * @param  array  $array
-     * @param  mixed  $key
-     * @param  mixed  $default
+     * @param array $array
+     * @param mixed $key
+     * @param mixed $default
+     *
      * @return mixed
      */
     public static function get(array $array, $key = null, $default = null)
     {
-        if (is_null($key)) return null;
+        if (is_null($key)) {
+            return;
+        }
 
-        if (isset($array[$key])) return $array[$key];
+        if (isset($array[$key])) {
+            return $array[$key];
+        }
 
-        foreach(explode('.', $key) as $token) {
-            if (! is_array($array) or ! array_key_exists($token, $array)) {
+        foreach (explode('.', $key) as $token) {
+            if (!is_array($array) or !array_key_exists($token, $array)) {
                 return $default;
             }
 
@@ -52,7 +58,8 @@ class Arr
     /**
      * Transmute passed items as an array.
      *
-     * @param  mixed  $items
+     * @param mixed $items
+     *
      * @return array
      */
     public static function transmute($items)
