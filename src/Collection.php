@@ -2,12 +2,12 @@
 
 namespace Vulcan\Collections;
 
+use Countable;
 use ArrayAccess;
 use ArrayIterator;
-use Countable;
 use IteratorAggregate;
-use Vulcan\Collections\Contracts\Collection as CollectionContract;
 use Vulcan\Collections\Support\Arr;
+use Vulcan\Collections\Contracts\Collection as CollectionContract;
 
 class Collection implements CollectionContract, ArrayAccess, Countable, IteratorAggregate
 {
@@ -204,7 +204,7 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
     public function reject(callable $callable)
     {
         return $this->filter(function ($item, $key) use ($callable) {
-            return !$callable($item, $key);
+            return ! $callable($item, $key);
         });
     }
 
@@ -359,7 +359,7 @@ class Collection implements CollectionContract, ArrayAccess, Countable, Iterator
         foreach ($this->items as $key => $value) {
             $groupKey = $callback($value, $key, $this->items);
 
-            if (!isset($results[$groupKey])) {
+            if (! isset($results[$groupKey])) {
                 $results[$groupKey] = [];
             }
 

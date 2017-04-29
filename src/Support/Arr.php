@@ -45,7 +45,7 @@ class Arr
         }
 
         foreach (explode('.', $key) as $token) {
-            if (!is_array($array) or !array_key_exists($token, $array)) {
+            if (! is_array($array) or ! array_key_exists($token, $array)) {
                 return $default;
             }
 
