@@ -19,13 +19,21 @@ class CollectionTest extends TestCase
         $this->assertSame(['foo', 'bar', 'baz'], $collection->all());
     }
 
-    public function test_get_method()
+    public function get_method_provider()
     {
-        $collection = new Collection(['foo', 'bar', 'baz']);
-        $this->assertSame('bar', $collection->get(1));
+        return [
+            [['foo', 'bar', 'baz'], 'bar', 1],
+            [['foo' => 'bar', 'lorem' => 'ipsum'], 'ipsum', 'lorem'],
+        ];
+    }
 
-        $collection = new Collection(['foo' => 'bar', 'lorem' => 'ipsum']);
-        $this->assertSame('ipsum', $collection->get('lorem'));
+    /**
+     * @dataProvider get_method_provider
+     */
+    public function test_get_method($data, $expect, $key)
+    {
+        $collection = new Collection($data);
+        $this->assertSame($expect, $collection->get($key));
     }
 
     public function test_push_method()
@@ -356,5 +364,58 @@ class CollectionTest extends TestCase
         ];
 
         $this->assertEquals($expected, $result->all());
+    }
+
+    public function test_get_Iterator()
+    {
+        $collection = Collection::make([4, 1, 3, 2, 5]);
+
+        $this->assertSame([4, 1, 3, 2, 5], $collection->getIterator()->getArrayCopy());
+    }
+
+    public function test_offset_is_existed()
+    {
+        $collection = Collection::make(['foo' => 'bar', 'lorem' => 'ipsum']);
+
+        $this->assertTrue($collection->offsetExists('foo'));
+        $this->assertFalse($collection->offsetExists('ipsum'));
+    }
+
+    public function offset_can_set_value_provider()
+    {
+        return [
+            [['foo' => 'bar', 'lorem' => 'ipsum'], 'key', 'value', ['foo' => 'bar', 'lorem' => 'ipsum', 'key' => 'value']],
+            [[1, 2, 3, 4], null, 5, [1, 2, 3, 4, 5]]
+        ];
+    }
+
+    /**
+     * @dataProvider offset_can_set_value_provider
+     */
+    public function test_offset_can_set_value($data, $offset, $value, $expect)
+    {
+        $collection = Collection::make($data);
+        $collection->offsetSet($offset, $value);
+
+        $this->assertSame($expect, $collection->all());
+    }
+
+    public function offset_can_unset_value_provider()
+    {
+        return [
+            [['foo' => 'bar', 'lorem' => 'ipsum'], 'foo'],
+            [[1, 2, 3, 4], 0]
+        ];
+    }
+
+    /**
+     * @dataProvider offset_can_unset_value_provider
+     */
+    public function test_offset_can_unset_value($data, $unsetKey)
+    {
+        $collection = Collection::make($data);
+        $collection->offsetUnset($unsetKey);
+
+        $this->assertFalse($collection->offsetExists($unsetKey));
     }
 }
